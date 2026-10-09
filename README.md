@@ -1,19 +1,20 @@
-# PlanMorph
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-An AI retention agent for PayPal Subscriptions. When a subscriber clicks **Cancel**, the agent finds out why, proposes one offer (30% off for 3 months, downgrade, or pause), and on acceptance changes the live subscription through the PayPal Subscriptions API v1, with no re-signup. Same subscription ID throughout.
+# Run and deploy your AI Studio app
 
-## How it works
-- **AI:** Claude (Anthropic Messages API) with tool calling. The model can only call `propose_offer` with an ID from a fixed catalog.
-- **Guardrails:** `policy.js` validates every offer server-side (known catalog only, single use per subscription). The LLM never touches PayPal directly.
-- **PayPal (sandbox):** create product and plans, create subscription, `revise` (plan switch, needs buyer re-consent), `suspend`, `cancel`, webhook endpoint.
+This contains everything you need to run your app locally.
 
-## Run it
-1. Create a PayPal sandbox REST app (developer.paypal.com) and get a sandbox buyer account.
-2. `cp .env.example .env` and fill in `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, `ANTHROPIC_API_KEY`.
-3. `npm install && npm run setup` (creates the product and plans, writes `plans.json`)
-4. `npm start`, open http://localhost:3000, subscribe with the sandbox buyer, then click Cancel.
+View your app in AI Studio: https://ai.studio/apps/f1770552-c75a-4c81-81d5-8140652cbf34
 
-## Known limits
-Offer usage is in-memory; webhook signatures aren't verified yet; plan changes require the buyer to approve on PayPal (by design of the API).
+## Run Locally
 
-MIT licensed.
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

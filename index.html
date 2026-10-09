@@ -1,34 +1,21 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
-<title>PlanMorph demo</title>
-<style>body{font:16px system-ui;max-width:560px;margin:2rem auto;padding:0 1rem}button{padding:.5rem 1rem;margin:.25rem 0}#log div{margin:.5rem 0;padding:.5rem .75rem;border-radius:8px;background:#eee}#log .me{background:#dbeafe}#log .ok{background:#dcfce7}input{width:65%;padding:.5rem}</style>
-<h1>Acme Notes</h1><p id=status>Not subscribed.</p>
-<button id=sub>Subscribe, $10/mo (PayPal sandbox)</button> <button id=cancel hidden>Cancel subscription</button>
-<div id=chat hidden><div id=log></div><input id=msg placeholder="Reply…"> <button id=send>Send</button> <button id=cancelNow>Cancel anyway</button></div>
-<script>
-const $=id=>document.getElementById(id);
-let sid=new URLSearchParams(location.search).get('subscription_id')||localStorage.sid, msgs=[];
-if(sid){localStorage.sid=sid;history.replaceState({},'','/');}
-const post=(u,b)=>fetch(u,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(b)}).then(r=>r.json());
-const add=(t,c)=>{const d=document.createElement('div');d.className=c||'';d.textContent=t;$('log').append(d)};
-async function refresh(){
-  if(!sid)return;
-  const s=await fetch('/api/subscription/'+sid).then(r=>r.json());
-  $('status').textContent=`Subscription ${sid}: ${s.status} (${s.plan_id})`;
-  $('sub').hidden=true;$('cancel').hidden=s.status!=='ACTIVE';
-}
-async function talk(text){
-  msgs.push({role:'user',content:text});add(text,'me');
-  const r=await post('/api/chat',{subscriptionId:sid,messages:msgs});
-  if(r.error)return add(r.error);
-  msgs.push({role:'assistant',content:r.text});add(r.text);
-  if(r.offer){const b=document.createElement('button');b.textContent='Accept: '+r.offer.label;
-    b.onclick=async()=>{const a=await post('/api/accept',{subscriptionId:sid,offerId:r.offer.id});
-      if(a.approveUrl)location=a.approveUrl;else{add(a.message||a.error,'ok');refresh();}};
-    $('log').append(b);}
-}
-$('sub').onclick=async()=>{const r=await post('/api/subscribe',{});location=r.approveUrl};
-$('cancel').onclick=()=>{$('chat').hidden=false;talk('I want to cancel my subscription.')};
-$('send').onclick=()=>{const t=$('msg').value.trim();if(t){$('msg').value='';talk(t)}};
-$('cancelNow').onclick=async()=>{await post('/api/cancel',{subscriptionId:sid});add('Subscription cancelled.','ok');refresh()};
-refresh();
-</script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlanMorph Security Audit Workbench</title>
+    <meta name="description" content="Comprehensive security vulnerability audit, CWE mapping, and side-by-side remediation patches for the creatoropener/PlanMorph repository." />
+    <meta property="og:title" content="PlanMorph Security Audit Workbench" />
+    <meta property="og:description" content="Comprehensive security vulnerability audit, CWE mapping, and side-by-side remediation patches for the creatoropener/PlanMorph repository." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

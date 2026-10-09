@@ -1,0 +1,6 @@
+{
+  "name": "PlanMorph Security Audit Workbench",
+  "description": "Comprehensive security vulnerability audit, CWE mapping, and side-by-side remediation patches for the creatoropener/PlanMorph repository.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
