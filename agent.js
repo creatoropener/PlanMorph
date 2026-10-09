@@ -23,7 +23,9 @@ export async function chat(messages) {
   });
   const j = await r.json();
   if (!r.ok) throw new Error('Anthropic API: ' + JSON.stringify(j));
-  const call = j.content.find(b => b.type === 'tool_use');
-  const text = j.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
-  return { text: call?.input.message || text, offer: call?.input.offer_id };
+  const call = j.content?.find(b => b.type === 'tool_use' && b.name === 'propose_offer');
+  const text = (j.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n');
+  const offerId = call?.input?.offer_id;
+  const offer = typeof offerId === 'string' && Object.hasOwn(OFFERS, offerId) ? offerId : undefined;
+  return { text: call?.input?.message || text, offer };
 }

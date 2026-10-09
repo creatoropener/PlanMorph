@@ -1,5 +1,13 @@
 const BASE = 'https://api-m.sandbox.paypal.com';
+const SUB_ID_RE = /^I-[A-Z0-9]{10,16}$/;
 let tok = { v: null, exp: 0 };
+
+export function validSubId(id) {
+  if (typeof id !== 'string' || !SUB_ID_RE.test(id)) {
+    throw Object.assign(new Error('Invalid subscription ID'), { status: 400, expose: true });
+  }
+  return encodeURIComponent(id);
+}
 
 async function token() {
   if (tok.v && Date.now() < tok.exp) return tok.v;
@@ -42,8 +50,8 @@ export function createPlan(product_id, name, price, trialPrice) {
 
 export const createSubscription = (plan_id, ctx) =>
   api('POST', '/v1/billing/subscriptions', { plan_id, application_context: { ...ctx, user_action: 'SUBSCRIBE_NOW' } });
-export const getSubscription = id => api('GET', `/v1/billing/subscriptions/${id}`);
+export const getSubscription = id => api('GET', `/v1/billing/subscriptions/${validSubId(id)}`);
 // Plan switches need buyer re-consent: the response contains an "approve" link.
-export const revise = (id, plan_id, ctx) => api('POST', `/v1/billing/subscriptions/${id}/revise`, { plan_id, application_context: ctx });
-export const suspend = (id, reason) => api('POST', `/v1/billing/subscriptions/${id}/suspend`, { reason });
-export const cancel = (id, reason) => api('POST', `/v1/billing/subscriptions/${id}/cancel`, { reason });
+export const revise = (id, plan_id, ctx) => api('POST', `/v1/billing/subscriptions/${validSubId(id)}/revise`, { plan_id, application_context: ctx });
+export const suspend = (id, reason) => api('POST', `/v1/billing/subscriptions/${validSubId(id)}/suspend`, { reason });
+export const cancel = (id, reason) => api('POST', `/v1/billing/subscriptions/${validSubId(id)}/cancel`, { reason });
