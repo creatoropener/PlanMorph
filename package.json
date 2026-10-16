@@ -6,7 +6,7 @@
   "scripts": {
     "setup": "node setup.js",
     "start": "node server.js",
-    "test": "node --import tsx --test"
+    "test": "node --import tsx --test *.test.ts"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
