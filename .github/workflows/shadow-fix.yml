@@ -32,7 +32,9 @@ jobs:
           # Enable only for the Node/TypeScript Batch 2 profile:
           agent-mode: legacy
           # Pass only the image(s) your repository's adapter needs:
-          image-node-typescript: ${{ secrets.CONTREE_IMAGE_NODE_TYPESCRIPT }}
-          # sandbox-image: ${{ secrets.CONTREE_IMAGE }}
+          sandbox-image: ${{ secrets.CONTREE_IMAGE }}
+
+          # Leave these disabled unless using separate images:
+          # image-node-typescript: ${{ secrets.CONTREE_IMAGE_NODE_TYPESCRIPT }}
           # image-python-pytest: ${{ secrets.CONTREE_IMAGE_PYTHON_PYTEST }}
           # image-node-package: ${{ secrets.CONTREE_IMAGE_NODE_PACKAGE }}
